@@ -1,3 +1,2 @@
-# scheduling-algo-sim
-
-Simulador interativo de algoritmos de escalonamento de processos.
+> [!NOTE]
+> This repository is on build.
