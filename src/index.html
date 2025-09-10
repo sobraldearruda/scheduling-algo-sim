@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>scheduling-algo-sim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Simulador de Algoritmos de Escalonamento de Processos</h1>
+
+    <!-- Entrada de processos -->
+    <section class="input-section">
+        <h2>Entrada de Processos</h2>
+        <form id="process-form">
+            <label>ID: <input type="text" id="pid"></label>
+            <label>Chegada: <input type="number" id="arrival"></label>
+            <label>Duração: <input type="number" id="burst"></label>
+            <label>Prioridade: <input type="number" id="priority"></label>
+            <button type="submit">Adicionar Processo</button>
+        </form>
+        <table id="process-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Chegada</th>
+                    <th>Duração</th>
+                    <th>Prioridade</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <!-- Seleção de algoritmo -->
+    <section class="algo-section">
+        <h2>Seleção do Algoritmo</h2>
+        <label for="algorithm">Algoritmo:</label>
+        <select id="algorithm">
+            <option value="FIFO">FIFO</option>
+            <option value="SJF">SJF</option>
+            <option value="RoundRobin">Round Robin</option>
+            <option value="Prioridade">Prioridade</option>
+        </select>
+        <label for="quantum">Quantum (apenas RR):</label>
+        <input type="number" id="quantum" value="2" min="1">
+    </section>
+
+    <!-- Botão de simulação -->
+    <section class="simulation-section">
+        <button id="simulate-btn">Rodar Simulação</button>
+        <canvas id="gantt" width="800" height="150"></canvas>
+        <div id="results"></div>
+    </section>
+
+    <!-- Comparação -->
+    <section class="compare-section">
+        <button id="compare-btn">Comparar Algoritmos</button>
+        <div id="comparison"></div>
+    </section>
+
+    <script src="algorithms.js"></script>
+    <script src="chart.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
