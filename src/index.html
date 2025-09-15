@@ -31,25 +31,40 @@
         </table>
     </section>
 
-    <!-- Seleção de algoritmo -->
-    <section class="algo-section">
-        <h2>Seleção do Algoritmo</h2>
-        <label for="algorithm">Algoritmo:</label>
-        <select id="algorithm">
+    <!-- Simulação 1 -->
+    <section class="simulation-section">
+        <h2>Simulação 1</h2>
+        <label for="algorithm1">Algoritmo:</label>
+        <select id="algorithm1">
             <option value="FIFO">FIFO</option>
             <option value="SJF">SJF</option>
             <option value="RoundRobin">Round Robin</option>
             <option value="Prioridade">Prioridade</option>
         </select>
-        <label for="quantum">Quantum (apenas RR):</label>
-        <input type="number" id="quantum" value="2" min="1">
+        <label for="quantum1">Quantum (apenas RR):</label>
+        <input type="number" id="quantum1" value="2" min="1">
+
+        <button id="simulate-btn-1">Rodar Simulação 1</button>
+        <canvas id="gantt1" width="800" height="150"></canvas>
+        <div id="results1"></div>
     </section>
 
-    <!-- Botão de simulação -->
+    <!-- Simulação 2 -->
     <section class="simulation-section">
-        <button id="simulate-btn">Rodar Simulação</button>
-        <canvas id="gantt" width="800" height="150"></canvas>
-        <div id="results"></div>
+        <h2>Simulação 2</h2>
+        <label for="algorithm2">Algoritmo:</label>
+        <select id="algorithm2">
+            <option value="FIFO">FIFO</option>
+            <option value="SJF">SJF</option>
+            <option value="RoundRobin">Round Robin</option>
+            <option value="Prioridade">Prioridade</option>
+        </select>
+        <label for="quantum2">Quantum (apenas RR):</label>
+        <input type="number" id="quantum2" value="2" min="1">
+
+        <button id="simulate-btn-2">Rodar Simulação 2</button>
+        <canvas id="gantt2" width="800" height="150"></canvas>
+        <div id="results2"></div>
     </section>
 
     <!-- Comparação -->
