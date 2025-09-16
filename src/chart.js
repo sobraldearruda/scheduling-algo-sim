@@ -1,58 +1,71 @@
 // Função para desenhar o diagrama de Gantt
+
 function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
-    let canvas = document.getElementById(canvasId);
-    let ctx = canvas.getContext("2d");
+    let canvas = document.getElementById(canvasId); // Obtém o elemento <canvas> pelo ID informado
+    let ctx = canvas.getContext("2d"); // Pega o contexto 2D do canvas
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa toda a área antes de desenhar o novo gráfico
 
-    let margin = 50;
-    let barHeight = 40;
-    let barY = 60;
-    let totalTime = ganttData[ganttData.length - 1].end;
-    let scale = (canvas.width - margin - 20) / totalTime;
-
-    let colors = {};
+    let margin = 50; // Define margens laterais para o gráfico
+    let barHeight = 40; // Define a altura de cada barra do gráfico
+    let barY = 60; // Define a posição vertical (Y) inicial da barra
+    let totalTime = ganttData[ganttData.length - 1].end; // Pega o tempo total do diagrama (fim do último bloco)
+    let scale = (canvas.width - margin - 20) / totalTime; // Calcula a escala horizontal (pixels por unidade de tempo)
+    let colors = {}; // Objeto para armazenar cores associadas a cada tarefa
     let palette = ["#4CAF50", "#2196F3", "#FFC107", "#E91E63", "#9C27B0", "#FF5722", "#795548", "#00BCD4"];
-    let colorIndex = 0;
+    let colorIndex = 0; // Índice para selecionar cores da paleta
 
-    ctx.fillStyle = "black";
-    ctx.font = "16px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(title, canvas.width / 2, 20);
+    ctx.fillStyle = "black"; // Configura cor do texto para preto
+    ctx.font = "16px Arial"; // Define fonte padrão para o título
+    ctx.textAlign = "center"; // Alinha o texto ao centro
+    ctx.fillText(title, canvas.width / 2, 20); // Escreve o título do diagrama no topo centralizado
 
+    // Percorre os blocos de dados do gráfico
     ganttData.forEach(block => {
+        // Se a tarefa ainda não tem uma cor, atribui uma da paleta
         if (!(block.id in colors)) {
             colors[block.id] = palette[colorIndex % palette.length];
             colorIndex++;
         }
 
-        let x = margin + block.start * scale;
-        let width = (block.end - block.start) * scale;
+        let x = margin + block.start * scale; // Calcula posição X da barra com base no tempo inicial
+        let width = (block.end - block.start) * scale; // Calcula largura da barra (duração da tarefa)
 
+        // Desenha a barra da tarefa com a cor atribuída
         ctx.fillStyle = colors[block.id];
         ctx.fillRect(x, barY, width, barHeight);
 
+        // Escreve o identificador da tarefa dentro da barra
         ctx.fillStyle = "white";
         ctx.font = "14px Arial";
         ctx.textAlign = "center";
         ctx.fillText(block.id, x + width / 2, barY + barHeight / 2 + 5);
     });
 
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "black"; // Configura cor da linha para preto
+
+    // Inicia desenho de uma linha horizontal (eixo do tempo)
     ctx.beginPath();
-    ctx.moveTo(margin, barY + barHeight);
-    ctx.lineTo(margin + totalTime * scale, barY + barHeight);
+    ctx.moveTo(margin, barY + barHeight); // ponto inicial da linha
+    ctx.lineTo(margin + totalTime * scale, barY + barHeight); // ponto final da linha
     ctx.stroke();
 
+    // Configura estilo de texto para as marcações do tempo
     ctx.fillStyle = "black";
     ctx.font = "12px Arial";
     ctx.textAlign = "center";
+
+    // Desenha divisões no eixo do tempo
     for (let t = 0; t <= totalTime; t++) {
         let x = margin + t * scale;
+
+        // Pequena linha vertical indicando divisão do tempo
         ctx.beginPath();
         ctx.moveTo(x, barY + barHeight);
         ctx.lineTo(x, barY + barHeight + 5);
         ctx.stroke();
+
+        // A cada fração do tempo (ou no final), escreve o número no eixo
         if (t % Math.ceil(totalTime / 10) === 0 || t === totalTime) {
             ctx.fillText(t, x, barY + barHeight + 20);
         }

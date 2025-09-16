@@ -1,3 +1,4 @@
+// Lista inicial de processos
 let processes = [
     {id: "P1", arrival: 0, burst: 5, priority: 2},
     {id: "P2", arrival: 0, burst: 10, priority: 1},
@@ -5,27 +6,42 @@ let processes = [
     {id: "P4", arrival: 7, burst: 20, priority: 1},
     {id: "P5", arrival: 7, burst: 10, priority: 2}
 ]; 
-let processCount = processes.length;
 
-updateTable();
+let processCount = processes.length; // Guarda a quantidade inicial de processos
+
+updateTable(); // Atualiza a tabela com os processos iniciais
 
 // Captura o envio do formulário de processos
 document.getElementById("process-form").addEventListener("submit", e => {
-    e.preventDefault();
+    e.preventDefault(); // Impede o comportamento padrão de recarregar a página
 
+    // Pega o ID do processo (se não for informado, gera automaticamente)
     let pid = document.getElementById("pid").value || `P${++processCount}`;
+
+    // Converte os valores de entrada em inteiros
     let arrival = parseInt(document.getElementById("arrival").value);
     let burst = parseInt(document.getElementById("burst").value);
     let priority = parseInt(document.getElementById("priority").value);
 
+    // Adiciona o processo novo na lista
     processes.push({id: pid, arrival, burst, priority});
+
+    // Atualiza a tabela com o novo processo
     updateTable();
+
+    // Limpa o formulário após o envio
     e.target.reset();
 });
 
+// Atualiza a tabela de processos
 function updateTable() {
+    // Seleciona o corpo da tabela
     let tbody = document.querySelector("#process-table tbody");
+
+    // Limpa o conteúdo atual
     tbody.innerHTML = "";
+
+    // Para cada processo, cria uma linha e adiciona na tabela
     processes.forEach(p => {
         let row = `<tr>
             <td>${p.id}</td>
@@ -37,16 +53,18 @@ function updateTable() {
     });
 }
 
+// Roda a simulação com um algoritmo escolhido
 function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
-    if (!processes.length) {
-        alert("Nenhum processo para simular.");
-        return;
-    }
-
+    // Pega o algoritmo selecionado pelo usuário
     let algo = document.getElementById(algoSelectId).value;
+
+    // Pega o quantum informado (apenas usado no Round Robin)
     let quantum = parseInt(document.getElementById(quantumInputId).value);
+
+    // Variáveis para armazenar o diagrama e os resultados
     let gantt, results;
 
+    // Executa o algoritmo correspondente
     if (algo === "FIFO") {
         ({gantt, results} = fifo(processes));
     } else if (algo === "SJF") {
@@ -61,8 +79,10 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
         ({gantt, results} = prioridade(processes));
     }
 
+    // Desenha o diagrama no canvas correspondente
     drawGantt(gantt, `Diagrama de Gantt (${algo})`, canvasId);
 
+    // Cria a tabela para exibir as métricas de cada processo com explicações
     let html = `<h3>Métricas por processo</h3>
     <table>
         <tr>
@@ -71,44 +91,58 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
             <th title="Tempo até a primeira resposta do processo">Resposta</th>
         </tr>`;
 
+    // Adiciona linha para cada processo com suas métricas
     results.forEach(r => {
         html += `<tr><td>${r.waiting}</td><td>${r.turnaround}</td><td>${r.response}</td></tr>`;
     });
     html += "</table>";
 
+    // Calcula médias das métricas
     let avg = {
         waiting: (results.reduce((s,r) => s+r.waiting,0)/results.length).toFixed(2),
         turnaround: (results.reduce((s,r) => s+r.turnaround,0)/results.length).toFixed(2),
         response: (results.reduce((s,r) => s+r.response,0)/results.length).toFixed(2),
     };
+
+    // Adiciona médias à tabela
     html += `<p><strong>Médias:</strong> Espera = ${avg.waiting}, Turnaround = ${avg.turnaround}, Resposta = ${avg.response}</p>`;
 
+    // Exibe o resultado correspondente
     document.getElementById(resultsDivId).innerHTML = html;
 }
 
+// Botão para rodar simulação do primeiro algoritmo
 document.getElementById("simulate-btn-1").addEventListener("click", () => {
     runSimulation("algorithm1", "quantum1", "gantt1", "results1");
 });
+
+// Botão para rodar simulação do segundo algoritmo
 document.getElementById("simulate-btn-2").addEventListener("click", () => {
     runSimulation("algorithm2", "quantum2", "gantt2", "results2");
 });
 
+// Botão para comparar todos os algoritmos
 document.getElementById("compare-btn").addEventListener("click", () => {
-    if (!processes.length) {
-        alert("Nenhum processo para comparar.");
-        return;
-    }
-
+    // Objeto que guarda os resultados de cada algoritmo
     let comparisons = {};
+
+    // Executa FIFO
     comparisons["FIFO"] = fifo(processes).results;
+
+    // Executa SJF
     comparisons["SJF"] = sjf(processes).results;
 
+    // Executa Round Robin (se quantum for válido)
     let q = parseInt(document.getElementById("quantum1").value);
     if (q > 0) comparisons[`RoundRobin`] = roundRobin(processes, q).results;
 
+    // Executa Prioridade
     comparisons["Prioridade"] = prioridade(processes).results;
 
+    // Monta tabela de comparação
     let html = "<h3>Comparação</h3><table><tr><th>Algoritmo</th><th>Espera Média</th><th>Turnaround Médio</th><th>Resposta Média</th></tr>";
+
+    // Para cada algoritmo, calcula médias e adiciona à tabela
     for (let algo in comparisons) {
         let arr = comparisons[algo];
         let avgWait = (arr.reduce((s,r)=>s+r.waiting,0)/arr.length).toFixed(2);
@@ -118,5 +152,6 @@ document.getElementById("compare-btn").addEventListener("click", () => {
     }
     html += "</table>";
 
+    // Exibe a tabela de comparação
     document.getElementById("comparison").innerHTML = html;
 });
