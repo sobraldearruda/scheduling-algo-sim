@@ -99,7 +99,7 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
     }
 
     // Desenha o diagrama no canvas correspondente
-    drawGantt(gantt, `Diagrama de Gantt (${algo})`, canvasId);
+    drawGantt(gantt, `Diagrama de Gantt (${algo})`, canvasId, 500);
 
     // Cria a tabela para exibir as métricas de cada processo com explicações
     let html = `<h3>Métricas por processo</h3>

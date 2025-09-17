@@ -1,6 +1,6 @@
 // Função para desenhar o diagrama de Gantt
 
-function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
+function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt", speed = 500) {
     let canvas = document.getElementById(canvasId); // Obtém o elemento <canvas> pelo ID informado
     let ctx = canvas.getContext("2d"); // Pega o contexto 2D do canvas
 
@@ -11,7 +11,6 @@ function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
     let barY = 60; // Define a posição vertical (Y) inicial da barra
     let totalTime = ganttData[ganttData.length - 1].end; // Pega o tempo total do diagrama (fim do último bloco)
     let scale = (canvas.width - margin - 20) / totalTime; // Calcula a escala horizontal (pixels por unidade de tempo)
-    let colors = {}; // Objeto para armazenar cores associadas a cada tarefa
     let palette = [
         "#4CAF50",  // P1
         "#2196F3",  // P2
@@ -36,46 +35,63 @@ function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
     ctx.textAlign = "center"; // Alinha o texto ao centro
     ctx.fillText(title, canvas.width / 2, 20); // Escreve o título do diagrama no topo centralizado
 
-    // Percorre os blocos de dados do gráfico
-    ganttData.forEach(block => {
-        let x = margin + block.start * scale; // Calcula posição X da barra com base no tempo inicial
-        let width = (block.end - block.start) * scale; // Calcula largura da barra (duração da tarefa)
+    let currentTime = 0; // tempo inicial da animação
 
-        // Desenha a barra da tarefa com a cor atribuída
-        ctx.fillStyle = getColorForProcess(block.id);
-        ctx.fillRect(x, barY, width, barHeight);
+    let timer = setInterval(() => {
+        ctx.clearRect(0, 40, canvas.width, canvas.height - 40); // limpa apenas a área do gráfico
 
-        // Escreve o identificador da tarefa dentro da barra
-        ctx.fillStyle = "white";
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(block.id, x + width / 2, barY + barHeight / 2 + 5);
-    });
+        // Percorre os blocos de dados do gráfico
+        ganttData.forEach(block => {
+            if (block.start < currentTime) {
+                let blockEnd = Math.min(block.end, currentTime); // limita até o tempo atual
+                let x = margin + block.start * scale; // Calcula posição X da barra com base no tempo inicial
+                let width = (blockEnd - block.start) * scale; // Calcula largura da barra (duração da tarefa)
 
-    ctx.strokeStyle = "black"; // Configura cor da linha para preto
-    ctx.beginPath(); // Inicia desenho de uma linha horizontal (eixo do tempo)
-    ctx.moveTo(margin, barY + barHeight); // ponto inicial da linha
-    ctx.lineTo(margin + totalTime * scale, barY + barHeight); // ponto final da linha
-    ctx.stroke();
+                // Desenha a barra da tarefa com a cor atribuída
+                ctx.fillStyle = getColorForProcess(block.id);
+                ctx.fillRect(x, barY, width, barHeight);
 
-    // Configura estilo de texto para as marcações do tempo
-    ctx.fillStyle = "black";
-    ctx.font = "12px Arial";
-    ctx.textAlign = "center";
+                // Escreve o identificador da tarefa dentro da barra
+                ctx.fillStyle = "white";
+                ctx.font = "14px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(block.id, x + width / 2, barY + barHeight / 2 + 5);
+            }
+        });
 
-    // Desenha divisões no eixo do tempo
-    for (let t = 0; t <= totalTime; t++) {
-        let x = margin + t * scale;
-
-        // Pequena linha vertical indicando divisão do tempo
-        ctx.beginPath();
-        ctx.moveTo(x, barY + barHeight);
-        ctx.lineTo(x, barY + barHeight + 5);
+        ctx.strokeStyle = "black"; // Configura cor da linha para preto
+        ctx.beginPath(); // Inicia desenho de uma linha horizontal (eixo do tempo)
+        ctx.moveTo(margin, barY + barHeight); // ponto inicial da linha
+        ctx.lineTo(margin + totalTime * scale, barY + barHeight); // ponto final da linha
         ctx.stroke();
 
-        // A cada fração do tempo (ou no final), escreve o número no eixo
-        if (t % Math.ceil(totalTime / 10) === 0 || t === totalTime) {
-            ctx.fillText(t, x, barY + barHeight + 20);
+        // Configura estilo de texto para as marcações do tempo
+        ctx.fillStyle = "black";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+
+        // Desenha divisões no eixo do tempo
+        for (let t = 0; t <= totalTime; t++) {
+            let x = margin + t * scale;
+
+            // Pequena linha vertical indicando divisão do tempo
+            ctx.beginPath();
+            ctx.moveTo(x, barY + barHeight);
+            ctx.lineTo(x, barY + barHeight + 5);
+            ctx.stroke();
+
+            // A cada fração do tempo (ou no final), escreve o número no eixo
+            if (t % Math.ceil(totalTime / 10) === 0 || t === totalTime) {
+                ctx.fillText(t, x, barY + barHeight + 20);
+            }
         }
-    }
+
+        // Avança tempo
+        currentTime++;
+
+        // Para quando chegar no final
+        if (currentTime > totalTime) {
+            clearInterval(timer);
+        }
+    }, speed); // speed = intervalo em ms (500 ms = meio segundo por unidade de tempo)
 }
