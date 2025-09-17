@@ -29,12 +29,6 @@ document.getElementById("process-form").addEventListener("submit", e => {
     let burst = parseInt(document.getElementById("burst").value);
     let priority = parseInt(document.getElementById("priority").value);
 
-    // Verifica se burst é válido
-    if (burst <= 0) {
-        alert("O tempo de execução (burst) deve ser maior que 0.");
-        return;
-    }
-
     // Verifica limite total de bursts
     let totalBurst = processes.reduce((sum, p) => sum + p.burst, 0);
     if (totalBurst + burst > 100) {
