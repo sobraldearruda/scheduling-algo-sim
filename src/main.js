@@ -99,9 +99,9 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
     let html = `<h3>Métricas por processo</h3>
     <table>
         <tr>
-            <th title="Tempo médio que o processo esperou antes de ser executado">Espera</th>
-            <th title="Tempo total entre a chegada e a finalização do processo">Turnaround</th>
-            <th title="Tempo até a primeira resposta do processo">Resposta</th>
+            <th title="Tempo que o processo esperou antes de ser executado (turnaround - burst)">Espera</th>
+            <th title="Tempo total entre a chegada e a finalização do processo (burst - chegada)">Turnaround</th>
+            <th title="Tempo até a primeira resposta do processo (primeira execução - chegada)">Resposta</th>
         </tr>`;
 
     // Adiciona linha para cada processo com suas métricas
