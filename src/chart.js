@@ -12,8 +12,24 @@ function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
     let totalTime = ganttData[ganttData.length - 1].end; // Pega o tempo total do diagrama (fim do último bloco)
     let scale = (canvas.width - margin - 20) / totalTime; // Calcula a escala horizontal (pixels por unidade de tempo)
     let colors = {}; // Objeto para armazenar cores associadas a cada tarefa
-    let palette = ["#4CAF50", "#2196F3", "#FFC107", "#E91E63", "#9C27B0", "#FF5722", "#795548", "#00BCD4"];
-    let colorIndex = 0; // Índice para selecionar cores da paleta
+    let palette = [
+        "#4CAF50",  // P1
+        "#2196F3",  // P2
+        "#FFC107",  // P3
+        "#E91E63",  // P4
+        "#9C27B0",  // P5
+        "#FF5722",  // P6
+        "#795548",  // P7
+        "#00BCD4",  // P8
+        "#607D8B",  // P9
+        "#8BC34A"   // P10
+    ];
+
+     // Função para pegar a cor fixa pelo ID
+    function getColorForProcess(pid) {
+        let num = parseInt(pid.replace("P", ""), 10); // extrai o número do processo
+        return palette[(num - 1) % palette.length];   // atribui cor ao processo
+    }
 
     ctx.fillStyle = "black"; // Configura cor do texto para preto
     ctx.font = "16px Arial"; // Define fonte padrão para o título
@@ -22,17 +38,11 @@ function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
 
     // Percorre os blocos de dados do gráfico
     ganttData.forEach(block => {
-        // Se a tarefa ainda não tem uma cor, atribui uma da paleta
-        if (!(block.id in colors)) {
-            colors[block.id] = palette[colorIndex % palette.length];
-            colorIndex++;
-        }
-
         let x = margin + block.start * scale; // Calcula posição X da barra com base no tempo inicial
         let width = (block.end - block.start) * scale; // Calcula largura da barra (duração da tarefa)
 
         // Desenha a barra da tarefa com a cor atribuída
-        ctx.fillStyle = colors[block.id];
+        ctx.fillStyle = getColorForProcess(block.id);
         ctx.fillRect(x, barY, width, barHeight);
 
         // Escreve o identificador da tarefa dentro da barra
@@ -43,9 +53,7 @@ function drawGantt(ganttData, title = "Diagrama de Gantt", canvasId = "gantt") {
     });
 
     ctx.strokeStyle = "black"; // Configura cor da linha para preto
-
-    // Inicia desenho de uma linha horizontal (eixo do tempo)
-    ctx.beginPath();
+    ctx.beginPath(); // Inicia desenho de uma linha horizontal (eixo do tempo)
     ctx.moveTo(margin, barY + barHeight); // ponto inicial da linha
     ctx.lineTo(margin + totalTime * scale, barY + barHeight); // ponto final da linha
     ctx.stroke();

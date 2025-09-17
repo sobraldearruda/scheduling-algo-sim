@@ -15,6 +15,12 @@ updateTable(); // Atualiza a tabela com os processos iniciais
 document.getElementById("process-form").addEventListener("submit", e => {
     e.preventDefault(); // Impede o comportamento padrão de recarregar a página
 
+    // Verifica limite de quantidade de processos
+    if (processes.length >= 10) {
+        alert("Número máximo de processos atingido (10).");
+        return;
+    }
+
     // Pega o ID do processo (se não for informado, gera automaticamente)
     let pid = document.getElementById("pid").value || `P${++processCount}`;
 
@@ -22,6 +28,19 @@ document.getElementById("process-form").addEventListener("submit", e => {
     let arrival = parseInt(document.getElementById("arrival").value);
     let burst = parseInt(document.getElementById("burst").value);
     let priority = parseInt(document.getElementById("priority").value);
+
+    // Verifica se burst é válido
+    if (burst <= 0) {
+        alert("O tempo de execução (burst) deve ser maior que 0.");
+        return;
+    }
+
+    // Verifica limite total de bursts
+    let totalBurst = processes.reduce((sum, p) => sum + p.burst, 0);
+    if (totalBurst + burst > 100) {
+        alert("A soma total dos tempos de execução não pode ultrapassar 100.");
+        return;
+    }
 
     // Adiciona o processo novo na lista
     processes.push({id: pid, arrival, burst, priority});
