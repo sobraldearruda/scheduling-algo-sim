@@ -46,3 +46,20 @@ th, td {
     padding: 6px;
     text-align: center;
 }
+
+.simulations-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.simulation-section {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+}

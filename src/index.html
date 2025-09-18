@@ -31,41 +31,44 @@
         </table>
     </section>
 
-    <!-- Simulação 1 -->
-    <section class="simulation-section">
-        <h2>Simulação 1</h2>
-        <label for="algorithm1">Algoritmo:</label>
-        <select id="algorithm1">
-            <option value="FIFO">FIFO</option>
-            <option value="SJF">SJF</option>
-            <option value="RoundRobin">Round Robin</option>
-            <option value="Prioridade">Prioridade</option>
-        </select>
-        <label for="quantum1">Quantum (apenas RR):</label>
-        <input type="number" id="quantum1" value="2" min="1">
+        <!-- Simulações -->
+    <div class="simulations-container">
+        <!-- Simulação 1 -->
+        <section class="simulation-section">
+            <h2>Simulação 1</h2>
+            <label for="algorithm1">Algoritmo:</label>
+            <select id="algorithm1">
+                <option value="FIFO">FIFO</option>
+                <option value="SJF">SJF</option>
+                <option value="RoundRobin">Round Robin</option>
+                <option value="Prioridade">Prioridade</option>
+            </select>
+            <label for="quantum1">Quantum (apenas RR):</label>
+            <input type="number" id="quantum1" value="2" min="1">
 
-        <button id="simulate-btn-1">Rodar Simulação 1</button>
-        <canvas id="gantt1" width="800" height="150"></canvas>
-        <div id="results1"></div>
-    </section>
+            <button id="simulate-btn-1">Rodar Simulação 1</button>
+            <canvas id="gantt1" width="600" height="120"></canvas>
+            <div id="results1"></div>
+        </section>
 
-    <!-- Simulação 2 -->
-    <section class="simulation-section">
-        <h2>Simulação 2</h2>
-        <label for="algorithm2">Algoritmo:</label>
-        <select id="algorithm2">
-            <option value="FIFO">FIFO</option>
-            <option value="SJF">SJF</option>
-            <option value="RoundRobin">Round Robin</option>
-            <option value="Prioridade">Prioridade</option>
-        </select>
-        <label for="quantum2">Quantum (apenas RR):</label>
-        <input type="number" id="quantum2" value="2" min="1">
+        <!-- Simulação 2 -->
+        <section class="simulation-section">
+            <h2>Simulação 2</h2>
+            <label for="algorithm2">Algoritmo:</label>
+            <select id="algorithm2">
+                <option value="FIFO">FIFO</option>
+                <option value="SJF">SJF</option>
+                <option value="RoundRobin">Round Robin</option>
+                <option value="Prioridade">Prioridade</option>
+            </select>
+            <label for="quantum2">Quantum (apenas RR):</label>
+            <input type="number" id="quantum2" value="2" min="1">
 
-        <button id="simulate-btn-2">Rodar Simulação 2</button>
-        <canvas id="gantt2" width="800" height="150"></canvas>
-        <div id="results2"></div>
-    </section>
+            <button id="simulate-btn-2">Rodar Simulação 2</button>
+            <canvas id="gantt2" width="600" height="120"></canvas>
+            <div id="results2"></div>
+        </section>
+    </div>
 
     <!-- Comparação -->
     <section class="compare-section">
