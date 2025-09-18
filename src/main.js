@@ -155,10 +155,10 @@ document.getElementById("compare-btn").addEventListener("click", () => {
 
     // Resumos de definição dos algoritmos
     const algoDescriptions = {
-        "FIFO": "First In, First Out: executa os processos na ordem de chegada",
-        "SJF": "Shortest Job First: executa sempre o processo com menor tempo de execução",
-        "RoundRobin": "Executa em ciclos iguais (quantum), alternando entre processos",
-        "Prioridade": "Executa primeiro os processos com maior prioridade (menor valor atribuído)"
+        "FIFO": "First In, First Out: executa os processos na ordem de chegada, sem preempção",
+        "SJF": "Shortest Job First: executa o processo com menor tempo de execução, sem preempção",
+        "RoundRobin": "Executa em ciclos iguais (quantum), alternando entre processos (preemptivo)",
+        "Prioridade": "Executa primeiro os processos com maior prioridade (menor valor atribuído), sem preempção",
     };
 
     // Monta tabela de comparação
