@@ -99,6 +99,7 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
     let html = `<h3>Métricas por processo</h3>
     <table>
         <tr>
+            <th title="Identificador do processo">ID</th>
             <th title="Tempo que o processo esperou antes de ser executado (turnaround - burst)">Espera</th>
             <th title="Tempo total entre a chegada e a finalização do processo (burst - chegada)">Turnaround</th>
             <th title="Tempo até a primeira resposta do processo (primeira execução - chegada)">Resposta</th>
@@ -106,7 +107,7 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
 
     // Adiciona linha para cada processo com suas métricas
     results.forEach(r => {
-        html += `<tr><td>${r.waiting}</td><td>${r.turnaround}</td><td>${r.response}</td></tr>`;
+        html += `<tr><td>${r.id}</td><td>${r.waiting}</td><td>${r.turnaround}</td><td>${r.response}</td></tr>`;
     });
     html += "</table>";
 
@@ -152,16 +153,31 @@ document.getElementById("compare-btn").addEventListener("click", () => {
     // Executa Prioridade
     comparisons["Prioridade"] = prioridade(processes).results;
 
-    // Monta tabela de comparação
-    let html = "<h3>Comparação</h3><table><tr><th>Algoritmo</th><th>Espera Média</th><th>Turnaround Médio</th><th>Resposta Média</th></tr>";
+    // Resumos de definição dos algoritmos
+    const algoDescriptions = {
+        "FIFO": "First In, First Out: executa os processos na ordem de chegada",
+        "SJF": "Shortest Job First: executa sempre o processo com menor tempo de execução",
+        "RoundRobin": "Executa em ciclos iguais (quantum), alternando entre processos",
+        "Prioridade": "Executa primeiro os processos com maior prioridade (menor valor atribuído)"
+    };
 
+    // Monta tabela de comparação
+    let html = `<h3>Comparação</h3>
+        <table>
+            <tr>
+                <th title="Escalonador de processos">Algoritmo</th>
+                <th title="Tempo médio que os processos esperaram antes de serem executados (turnaround - burst)">Espera Média</th>
+                <th title="Tempo total médio entre a chegada e a finalização do processos (burst - chegada)">Turnaround Médio</th>
+                <th title="Tempo médio até a primeira resposta dos processos (primeira execução - chegada)">Resposta Média</th>
+            </tr>`;
+    
     // Para cada algoritmo, calcula médias e adiciona à tabela
     for (let algo in comparisons) {
         let arr = comparisons[algo];
         let avgWait = (arr.reduce((s,r)=>s+r.waiting,0)/arr.length).toFixed(2);
         let avgTurn = (arr.reduce((s,r)=>s+r.turnaround,0)/arr.length).toFixed(2);
         let avgResp = (arr.reduce((s,r)=>s+r.response,0)/arr.length).toFixed(2);
-        html += `<tr><td>${algo}</td><td>${avgWait}</td><td>${avgTurn}</td><td>${avgResp}</td></tr>`;
+        html += `<tr><td title="${algoDescriptions[algo]}">${algo}</td><td>${avgWait}</td><td>${avgTurn}</td><td>${avgResp}</td></tr>`;
     }
     html += "</table>";
 
