@@ -217,7 +217,7 @@ function runSimulation(algoSelectId, quantumInputId, canvasId, resultsDivId) {
     }
   }
 
-  drawGantt(gantt, `Diagrama de Gannt (${algo})`, canvasId, 500);
+  drawGantt(gantt, `Diagrama de Gantt (${algo})`, canvasId, 500);
 
   let html = `<h3>Métricas</h3><table>
         <tr>
